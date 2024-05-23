@@ -1,30 +1,16 @@
-# IISSI-2 IS: Simulacro de examen de laboratorio
 
-## Enunciado
+## Examen - Economic
+ 
+Se desea visualizar qué restaurantes son económicos en el listado de restaurantes del propietario y que aparezca una etiqueta € similar a la mostrada en la captura (en brandSuccess, abajo y a la derecha) cuando un restaurante sea económico, y dos símbolos de euro €€ cuando el restaurante no lo sea (en brandPrimary, abajo y a la derecha).
 
-Una vez se ha puesto en marcha la primera versión de DeliverUS, los inversores han solicitado la inclusión de una nueva funcionalidad que consiste en ofrecer a los propietarios la posibilidad de promocionar sus restaurantes. Cada propietario sólo podrá promocionar uno de sus restaurantes.
+Para ello, cuando se da de alta un producto de un restaurante se deberá computar el precio medio de los productos del resto de restaurantes y compararlo con el precio medio de los productos del restaurante actual, incluyendo el producto recién creado.
 
-Un propietario podrá promocionar un restaurante de dos maneras distintas:
+Se considerará económico a aquellos restaurantes cuyo precio medio de productos sea inferior al precio medio del resto en el momento de la creación del producto.
 
-* En el formulario de creación de restaurante. Por defecto, se seleccionará la opción de no promocionado. Si el propietario indica que el nuevo restaurante debe estar promocionado, pero ya existían restaurantes promocionados del mismo propietario, al pulsar el botón `Save` se mostrará un error y no se creará el restaurante.
+Nota1: Para hacer un filtrado de productos cuyo restaurante sea distinto del restaurante actual puede usar el operador not equal (Sequelize.Op.ne)
+Nota2: Para computar el valor medio de una columna, deberá usar la función Sequelize.fn ('AVG', Sequelize.col('columnName')).
 
-* En la pantalla de "Mis restaurantes", mediante un botón mostrado junto a cada restaurante, que permitirá mediante su pulsación promocionar el restaurante en cuestión. Si el propietario pulsa el botón para promocionar un nuevo restaurante y ya existían otros restaurantes promocionados del mismo dueño, se procederá a promocionar el restaurante indicado y se marcará como "no promocionado" el restaurante que lo fuese anteriormente. La aplicación debe pedir confirmación al propietario cuando se pulse el botón; utilice para ello el componente suministrado `ConfirmationModal`, similar al componente `DeleteModal` utilizado en clase.
-
-Además, los restaurantes promocionados aparecerán siempre al principio de los listados de restaurantes que se le presentan tanto a los propietarios como a los clientes. Además de presentarse al principio, los restaurantes promocionados deben destacarse visualmente, por lo que aparecerá una etiqueta de texto `¡En promoción!` con el color principal de la marca.
-
-### Ejercicio 1
-
-Realice todos los cambios necesarios en el proyecto de backend para implementar el nuevo requisito.
-
-### Ejercicio 2
-
-Realice todos los cambios necesarios en el proyecto de frontend para implementar el nuevo requisito.
-
-![captura1](https://user-images.githubusercontent.com/19324988/235651836-d57d9c7e-4b8d-46a2-9154-b414a7abf702.png)
-
-![captura2](https://user-images.githubusercontent.com/19324988/235651849-4d03c7d9-f332-4952-8cbc-9fa5db4f97fb.png)
-
-![captura3](https://user-images.githubusercontent.com/19324988/235651853-e1d13916-4f47-4e17-97e0-5696b647bee7.png)
+Para mayor claridad, puede observar el uso de estos operadores en el siguiente ejemplo donde se computa la media de los costes de envío de los pedidos que no se corresponden con el usuario currentUserId:
 
 ## Introducción
 

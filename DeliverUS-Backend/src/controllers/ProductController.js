@@ -36,10 +36,38 @@ const show = async function (req, res) {
   }
 }
 
+const updateRestaurantCareza = async function (restaurantId) {
+  const queryResultOtherRestaurantAvgPrice = await Product.findOne({
+    where: {
+      restaurantId: { [Sequelize.Op.ne]: restaurantId }
+    },
+    attributes: [
+      [Sequelize.fn('AVG', Sequelize.col('price')), 'avgPrice']
+    ]
+  })
+
+  const queryResultCurrentRestaurantAvgPrice = await Product.findOne({
+    where: {
+      restaurantId
+    },
+    attributes: [
+      [Sequelize.fn('AVG', Sequelize.col('price')), 'avgPrice']
+    ]
+  })
+
+  if (queryResultCurrentRestaurantAvgPrice !== null && queryResultOtherRestaurantAvgPrice !== null) {
+    const avgPriceOtherRestaurants = queryResultOtherRestaurantAvgPrice.dataValues.avgPrice
+    const avgPriceCurrentRestaurant = queryResultCurrentRestaurantAvgPrice.dataValues.avgPrice
+    const economico = avgPriceOtherRestaurants > avgPriceCurrentRestaurant
+    Restaurant.update({ isEconomic: economico }, { where: { id: restaurantId } })
+  }
+}
+
 const create = async function (req, res) {
   let newProduct = Product.build(req.body)
   try {
     newProduct = await newProduct.save()
+    updateRestaurantCareza(newProduct.restaurantId)
     res.json(newProduct)
   } catch (err) {
     res.status(500).send(err)
@@ -59,6 +87,7 @@ const update = async function (req, res) {
 const destroy = async function (req, res) {
   try {
     const result = await Product.destroy({ where: { id: req.params.productId } })
+    await updateRestaurantCareza(result.restaurantId)
     let message = ''
     if (result === 1) {
       message = 'Sucessfuly deleted product id.' + req.params.productId

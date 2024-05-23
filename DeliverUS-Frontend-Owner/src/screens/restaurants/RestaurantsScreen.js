@@ -40,44 +40,21 @@ export default function RestaurantsScreen ({ navigation, route }) {
           <TextSemiBold>Avg. service time: <TextSemiBold textStyle={{ color: GlobalStyles.brandPrimary }}>{item.averageServiceMinutes} min.</TextSemiBold></TextSemiBold>
         }
         <TextSemiBold>Shipping: <TextSemiBold textStyle={{ color: GlobalStyles.brandPrimary }}>{item.shippingCosts.toFixed(2)}€</TextSemiBold></TextSemiBold>
-        <View style={styles.actionButtonsContainer}>
-          <Pressable
-            onPress={() => navigation.navigate('EditRestaurantScreen', { id: item.id })
-            }
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed
-                  ? GlobalStyles.brandBlueTap
-                  : GlobalStyles.brandBlue
-              },
-              styles.actionButton
-            ]}>
-          <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center' }]}>
-            <MaterialCommunityIcons name='pencil' color={'white'} size={20}/>
-            <TextRegular textStyle={styles.text}>
-              Edit
-            </TextRegular>
-          </View>
-        </Pressable>
 
-        <Pressable
-            onPress={() => { setRestaurantToBeDeleted(item) }}
-            style={({ pressed }) => [
-              {
-                backgroundColor: pressed
-                  ? GlobalStyles.brandPrimaryTap
-                  : GlobalStyles.brandPrimary
-              },
-              styles.actionButton
-            ]}>
-          <View style={[{ flex: 1, flexDirection: 'row', justifyContent: 'center' }]}>
-            <MaterialCommunityIcons name='delete' color={'white'} size={20}/>
-            <TextRegular textStyle={styles.text}>
-              Delete
-            </TextRegular>
-          </View>
-        </Pressable>
-        </View>
+        {item.isEconomic &&
+            <View style={styles.economicoVerde}>
+              <View>
+              <TextRegular style={[{ color: GlobalStyles.brandSuccess }]}>€</TextRegular>
+              </View>
+            </View>
+         }
+
+        {!item.isEconomic &&
+         <View style={styles.economicoRojo}>
+          <TextRegular style={[{ color: GlobalStyles.brandPrimary }]}>€€</TextRegular>
+         </View>
+         }
+
       </ImageCard>
     )
   }
@@ -175,6 +152,30 @@ export default function RestaurantsScreen ({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  economicoRojo: {
+    position: 'absolute',
+    right: 20,
+    display: 'flex',
+    height: 20,
+    width: 60,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: GlobalStyles.brandPrimary,
+    marginTop: 30,
+    textAlign: 'center'
+  },
+  economicoVerde: {
+    position: 'absolute',
+    right: 20,
+    display: 'flex',
+    height: 20,
+    width: 60,
+    borderRadius: 8,
+    borderWidth: 2,
+    marginTop: 30,
+    borderColor: GlobalStyles.brandSuccess,
+    textAlign: 'center'
+  },
   container: {
     flex: 1
   },
